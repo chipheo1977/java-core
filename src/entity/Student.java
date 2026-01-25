@@ -1,3 +1,5 @@
+package entity;
+
 public class Student extends Person {
 
     private int id;
@@ -15,15 +17,26 @@ public class Student extends Person {
         this.score = score;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Student(String name, int age, boolean isDied, float score) {
+        super(name, age, isDied);
+        this.score = score;
+    }
+
     public Student(String name, int age, boolean isDied, float score, int id) {
         super(name, age, isDied);
         this.score = score;
         this.id = id;
     }
 
+
+
     @Override
     public String toString() {
-        return "Student: " + getName() +
+        return "entity.Student: " + getName() +
                 ", " +
                 "score: " + score +
                 ", " +
