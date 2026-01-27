@@ -1,6 +1,9 @@
 package services;
 
+import constant.MaxLimit;
+import constant.Role;
 import entity.Student;
+import utils.Helper;
 
 import java.util.ArrayList;
 
@@ -12,6 +15,7 @@ public class StudentService {
     }
 
     public ArrayList<Student> getAll() {
+        this.students.forEach(System.out::println);
         return this.students;
     }
 
@@ -24,23 +28,45 @@ public class StudentService {
         return null;
     }
 
-    public Student add(Student st) {
-        Student newStudent = new Student(st.getName(), st.getAge(), st.isDied(),  st.getScore(), st.getId());
+    public void add() {
+        String name = Helper.inputValidName("name", MaxLimit.Length.getValue());
+        int age = Helper.inputValidInt("age", MaxLimit.AGE.getValue());
+        float score = Helper.inputValidFloat("score", MaxLimit.SCORE.getValue());
+        Helper.wikiRole();
+        int code = Helper.inputValidInt("role", 3);
+        Role role = Role.fromCode(code);
+        int id = Helper.randomNumber();
+
+        Helper.isMaxNumber(age, MaxLimit.AGE.getValue(), "age");
+
+        Student newStudent = new Student(name, age, false, score, id, role);
         this.students.add(newStudent);
-        return newStudent;
+
+        System.out.println("Add students: " + name + " success!");
     }
 
-    public void update(int id, Student st) {
+    public void update() {
+        int id = Helper.inputValidInt("student id", MaxLimit.ID.getValue());
+        String name = Helper.inputValidName("name", MaxLimit.Length.getValue());
+        int age = Helper.inputValidInt("age", MaxLimit.AGE.getValue());
+        float score = Helper.inputValidFloat("score", MaxLimit.SCORE.getValue());
+        Helper.wikiRole();
+        int code = Helper.inputValidInt("role", 3);
+        Role role = Role.fromCode(code);
+
         Student student = getById(id);
-        student.setName(st.getName());
-        student.setAge(st.getAge());
-        student.setDied(st.isDied());
-        student.setScore(st.getScore());
-        student.setId(st.getId());
+        student.setName(name);
+        student.setAge(age);
+        student.setScore(score);
+        student.setRole(role);
+
+        System.out.println("Updated students: " + name + " success!");
     }
 
-    public void delete(int id) {
+    public void delete() {
+        int id = Helper.inputValidInt("student id", MaxLimit.ID.getValue());
         Student student = getById(id);
+
         if (student == null) {
             System.out.println("entity.Student not found!");
         } else {

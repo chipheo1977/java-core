@@ -1,64 +1,13 @@
 package Controller;
 
-import entity.Student;
 import services.StudentService;
 import utils.Helper;
 
-import java.util.InputMismatchException;
-import java.util.Scanner;
-
 public class StudentController {
-    private static Scanner scanner = new Scanner(System.in);
-    private StudentService service;
-    private Helper helper;
+    private final StudentService service;
 
-    public StudentController(StudentService service, Helper helper) {
+    public StudentController(StudentService service) {
         this.service = service;
-        this.helper = helper;
-    }
-
-    public void listStudents() {
-        service.getAll().forEach(System.out::println);
-    }
-
-    public void updateStudent() {
-        try {
-            System.out.print("Please enter student id: ");
-            int id = scanner.nextInt();
-            scanner.nextLine();
-
-            System.out.print("Enter name:");
-            String name = scanner.nextLine();
-
-            System.out.print("Enter age:");
-            int age = scanner.nextInt();
-
-            System.out.print("Enter score:");
-            float score = scanner.nextFloat();
-
-            Student stUpdated = new Student(name, age, false, score, id);
-            service.update(id, stUpdated);
-        } catch (InputMismatchException e) {
-            System.out.println("Enter wrong format!");
-        }
-    }
-
-    public void deleteStudentById() {
-        int id = Helper.inputValidInt("student id", 100);
-
-        this.service.delete(id);
-    }
-
-    public void addStudent() {
-        String name = helper.inputValidName();
-        int age = helper.inputValidInt("age", 100);
-        float score = helper.inputValidFloat("score", 10);
-        int id = helper.randomNumber();
-
-        Student newStudent = new Student(name, age, false, score, id);
-        service.add(newStudent);
-
-        System.out.println("Add students: " + name + " success!");
     }
 
     public void managementStudent() {
@@ -72,28 +21,28 @@ public class StudentController {
             System.out.println("5. exit!");
             System.out.print("select option (1-5): ");
 
-            choice = scanner.nextInt();
-            scanner.nextLine();
+            choice = Helper.scanner.nextInt();
+            Helper.scanner.nextLine();
 
             switch (choice) {
                 case 1:
                     System.out.println("Option 1: list students");
-                    this.listStudents();
+                    this.service.getAll();
                     break;
                 case 2:
                     System.out.println("Option 2: add student");
-                    this.addStudent();
+                    this.service.add();
                     break;
                 case 3:
                     System.out.println("Option 3: edit student");
-                    this.updateStudent();
+                    this.service.update();
                     break;
                 case 4:
                     System.out.println("Options 4: delete student");
-                    this.deleteStudentById();
+                    this.service.delete();
                     break;
                 case 5:
-                    scanner.close();
+                    Helper.scanner.close();
                     break;
                 default:
                     System.out.println("Wrong options, please select 1–5.");

@@ -1,11 +1,13 @@
 package services;
 
-import entity.CoursePrimary;
+import constant.MaxLimit;
 import entity.CourseSecondary;
+import utils.Helper;
 
 import java.util.ArrayList;
 
 public class CourseSecondaryService {
+
     private final ArrayList<CourseSecondary> courses;
 
     public CourseSecondaryService(ArrayList<CourseSecondary> courses) {
@@ -13,6 +15,7 @@ public class CourseSecondaryService {
     }
 
     public ArrayList<CourseSecondary> getAll() {
+        courses.forEach(System.out::println);
         return this.courses;
     }
 
@@ -25,25 +28,41 @@ public class CourseSecondaryService {
         return null;
     }
 
-    public void add(CourseSecondary course) {
-        CourseSecondary newCourse = new CourseSecondary(
-                course.getId(),
-                course.getName(),
-                course.getLesson(),
-                course.getRetail()
+    public void add() {
+        String name = Helper.inputValidName("name", MaxLimit.Length.getValue());
+        int lesson = Helper.inputValidInt("lesson", MaxLimit.LESSON.getValue());
+        float retail = Helper.inputValidFloat("retail", MaxLimit.PRICE.getValue());
+        int id = Helper.randomNumber();
+
+        CourseSecondary newC = new CourseSecondary(
+                id,
+                name,
+                lesson,
+                retail
         );
-        this.courses.add(newCourse);
+        this.courses.add(newC);
+
+        System.out.println("Add secondary course: " + name + " success!");
     }
 
-    public void update(int id, CourseSecondary c) {
+    public void update() {
+        int value = MaxLimit.ID.getValue();
+        int id = Helper.inputValidInt("Student id", value);
+        String name = Helper.inputValidName("name", MaxLimit.Length.getValue());
+        int lesson = Helper.inputValidInt("lesson", MaxLimit.LESSON.getValue());
+        float retail = Helper.inputValidFloat("retail", MaxLimit.PRICE.getValue());
+
         CourseSecondary course = getById(id);
-        course.setName(c.getName());
-        course.setLesson(c.getLesson());
-        course.setRetail(c.getRetail());
-        course.setId(c.getId());
+        course.setName(name);
+        course.setLesson(lesson);
+        course.setRetail(retail);
+
+        System.out.println("Updated secondary course: " + name + " success!");
     }
 
-    public void delete(int id) {
+    public void delete() {
+        int id = Helper.inputValidInt("course id", MaxLimit.ID.getValue());
+
         CourseSecondary course = getById(id);
         if (course == null) {
             System.out.println("Course not found!");
@@ -54,7 +73,7 @@ public class CourseSecondaryService {
                 }
             }
 
-            System.out.println("deleted course id: " + id + " success!");
+            System.out.println("deleted secondary course id: " + id + " success!");
         }
     }
 }

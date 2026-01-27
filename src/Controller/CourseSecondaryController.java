@@ -9,45 +9,12 @@ import java.util.Scanner;
 public class CourseSecondaryController {
 
     private static final Scanner scanner = new Scanner(System.in);
-    private CourseSecondaryService service;
-    private Helper helper;
+    private final CourseSecondaryService service;
 
-    public CourseSecondaryController(CourseSecondaryService service, Helper helper) {
+    public CourseSecondaryController(CourseSecondaryService service) {
         this.service = service;
-        this.helper = helper;
     }
 
-    public void listCourse() {
-        service.getAll().forEach(System.out::println);
-    }
-
-    public void addCourse() {
-        String name = helper.inputValidName();
-        int lesson = helper.inputValidInt("lesson", 100);
-        float retail = helper.inputValidFloat("retail", 1000);
-        int id = helper.randomNumber();
-
-        CourseSecondary newCourse = new CourseSecondary(id, name, lesson, retail);
-        service.add(newCourse);
-
-        System.out.println("Add course: " + name + " success!");
-    }
-
-    public void deleteCourseById() {
-        int id = Helper.inputValidInt("course id", 100);
-
-        this.service.delete(id);
-    }
-
-    public void update() {
-        int id = Helper.inputValidInt("student id", 100);
-        String name = helper.inputValidName();
-        int lesson = helper.inputValidInt("lesson", 1000);
-        float retail = helper.inputValidFloat("retail", 99999);
-
-        CourseSecondary newCourse = new CourseSecondary(id, name, lesson, retail);
-        service.update(id, newCourse);
-    }
 
     public void managementCourse() {
         int choice;
@@ -66,19 +33,19 @@ public class CourseSecondaryController {
             switch (choice) {
                 case 1:
                     System.out.println("Option 1: list courses");
-                    this.listCourse();
+                    service.getAll();
                     break;
                 case 2:
                     System.out.println("Option 2: add course");
-                    this.addCourse();
+                    service.add();
                     break;
                 case 3:
                     System.out.println("Option 3: edit course");
-                    this.update();
+                    service.update();
                     break;
                 case 4:
                     System.out.println("Options 4: delete course");
-                    this.deleteCourseById();
+                    service.delete();
                     break;
                 case 5:
                     scanner.close();

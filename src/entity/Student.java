@@ -1,9 +1,12 @@
 package entity;
 
+import constant.Role;
+
 public class Student extends Person {
 
     private int id;
     private float score;
+    private Role role;
 
     public float getScore() {
         return score;
@@ -11,6 +14,10 @@ public class Student extends Person {
 
     public int getId() {
         return this.id;
+    }
+
+    public Role getRole() {
+        return this.role;
     }
 
     public void setScore(float score) {
@@ -21,22 +28,27 @@ public class Student extends Person {
         this.id = id;
     }
 
-    public Student(String name, int age, boolean isDied, float score) {
-        super(name, age, isDied);
-        this.score = score;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
-    public Student(String name, int age, boolean isDied, float score, int id) {
+    public Student(String name, int age, boolean isDied, float score, Role role) {
         super(name, age, isDied);
         this.score = score;
+        this.role = role;
+    }
+
+    public Student(String name, int age, boolean isDied, float score, int id, Role role) {
+        super(name, age, isDied);
+        this.score = score;
+        this.role = role;
         this.id = id;
     }
 
 
-
     @Override
     public String toString() {
-        return "entity.Student: " + getName() +
+        return "Student: " + getName() +
                 ", " +
                 "score: " + score +
                 ", " +
@@ -44,6 +56,8 @@ public class Student extends Person {
                 ", " +
                 "status: " + (isDied() ? "died" : "alive") +
                 ", " +
-                "id: " + this.id;
+                "id: " + this.id +
+                ", " +
+                "role: " + this.role;
     }
 }
