@@ -3,6 +3,7 @@ package entity.exeption;
 import constant.ErrorCode;
 
 public abstract class AppException extends RuntimeException {
+
     private final ErrorCode code;
 
     public AppException(ErrorCode code, String message) {

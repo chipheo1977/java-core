@@ -51,6 +51,7 @@ public class CoursePrimaryService {
         float retail = Helper.inputValidFloat("retail", MaxLimit.PRICE.getValue());
 
         CoursePrimary c = getById(id);
+
         c.setName(name);
         c.setLesson(lesson);
         c.setRetail(retail);

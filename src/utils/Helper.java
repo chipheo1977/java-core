@@ -62,6 +62,7 @@ public class Helper {
 
     public static String inputValidName(String field, int max) {
         while (true) {
+            // TODO: Sua lai cach xu ly exception
             System.out.print("Enter name: ");
             String name = scanner.nextLine().trim();
 
@@ -70,8 +71,10 @@ public class Helper {
                 isMaxLength(name, max, field);
 
                 return name;
-            } catch (AppException e) {
+            } catch (MaxNumberException e) {
                 System.out.println(e.getMessage());
+            } catch (Exception e) {
+                System.out.println("ABBBB");
             }
         }
     }
@@ -99,5 +102,9 @@ public class Helper {
         System.out.println("1. Leader");
         System.out.println("2. Semi leader");
         System.out.println("3. Normal");
+    }
+
+    public static boolean validateLen(String value, int maxLen) {
+        return value != null && !value.isEmpty() && value.length() <= maxLen;
     }
 }

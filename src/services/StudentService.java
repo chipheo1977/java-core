@@ -1,13 +1,17 @@
 package services;
 
+import constant.GlobalConstant;
 import constant.MaxLimit;
 import constant.Role;
 import entity.Student;
+import entity.exeption.MaxLengthException;
 import utils.Helper;
+import utils.StringUtils;
 
 import java.util.ArrayList;
 
 public class StudentService {
+
     private final ArrayList<Student> students;
 
     public StudentService(ArrayList<Student> students) {
@@ -29,20 +33,34 @@ public class StudentService {
     }
 
     public void add() {
-        String name = Helper.inputValidName("name", MaxLimit.Length.getValue());
-        int age = Helper.inputValidInt("age", MaxLimit.AGE.getValue());
-        float score = Helper.inputValidFloat("score", MaxLimit.SCORE.getValue());
-        Helper.wikiRole();
-        int code = Helper.inputValidInt("role", 3);
-        Role role = Role.fromCode(code);
-        int id = Helper.randomNumber();
+        try {
+            // TODO: Refactor
+            System.out.print("Enter name: ");
+            String name = Helper.scanner.nextLine().trim();
 
-        Helper.isMaxNumber(age, MaxLimit.AGE.getValue(), "age");
+            boolean isNotValidName = !StringUtils.isEmpty(name);
+            boolean isNotValidLen = !Helper.validateLen(name, GlobalConstant.MAX_LEN);
 
-        Student newStudent = new Student(name, age, false, score, id, role);
-        this.students.add(newStudent);
+            if (isNotValidName || isNotValidLen) {
+                throw new MaxLengthException("E", 19);
+            }
 
-        System.out.println("Add students: " + name + " success!");
+            float score = Helper.inputValidFloat("score", MaxLimit.SCORE.getValue());
+
+            Helper.wikiRole();
+            int code = Helper.inputValidInt("role", 3);
+            Role role = Role.fromCode(code);
+            int id = Helper.randomNumber();
+//
+//            Helper.isMaxNumber(age, MaxLimit.AGE.getValue(), "age");
+//
+//            Student newStudent = new Student(name, age, false, score, id, role);
+//            this.students.add(newStudent);
+
+            System.out.println("Add students: " + name + " success!");
+        } catch (Exception e) {
+            System.out.println("Hanle ex");
+        }
     }
 
     public void update() {
@@ -55,6 +73,9 @@ public class StudentService {
         Role role = Role.fromCode(code);
 
         Student student = getById(id);
+
+        // thieeus validate
+
         student.setName(name);
         student.setAge(age);
         student.setScore(score);
@@ -69,14 +90,15 @@ public class StudentService {
 
         if (student == null) {
             System.out.println("entity.Student not found!");
-        } else {
-            for (Student s : students) {
-                if (s.getId() == id) {
-                    students.remove(s);
-                }
-            }
-
-            System.out.println("deleted student id: " + id + " success!");
+            return;
         }
+
+        for (Student s : students) {
+            if (s.getId() == id) {
+                students.remove(s);
+            }
+        }
+
+        System.out.println("deleted student id: " + id + " success!");
     }
 }

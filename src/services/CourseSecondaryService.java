@@ -64,6 +64,8 @@ public class CourseSecondaryService {
         int id = Helper.inputValidInt("course id", MaxLimit.ID.getValue());
 
         CourseSecondary course = getById(id);
+
+        // TODO: Nên sử dụng retun thay vì if else
         if (course == null) {
             System.out.println("Course not found!");
         } else {
