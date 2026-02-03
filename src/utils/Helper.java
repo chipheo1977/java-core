@@ -1,10 +1,7 @@
 package utils;
 
 import constant.MaxLimit;
-import entity.exeption.AppException;
-import entity.exeption.EmptyException;
-import entity.exeption.MaxLengthException;
-import entity.exeption.MaxNumberException;
+import exception.AppException;
 
 import java.util.Random;
 import java.util.Scanner;
@@ -15,7 +12,7 @@ public class Helper {
 
     public static int randomNumber() {
         Random random = new Random();
-        return random.nextInt(MaxLimit.ID.getValue());
+        return random.nextInt(MaxLimit.ID);
     }
 
     public static Scanner scanner = new Scanner(System.in);
@@ -76,21 +73,47 @@ public class Helper {
         }
     }
 
-    public static void isMaxNumber(int value, int max, String field) {
-        if (value > max) {
-            throw new MaxNumberException(field, max);
-        }
+    public static int convertStringToInt(String value) {
+        return Integer.parseInt(value);
     }
 
-    public static void isEmpty(String value, String field) {
+    public static float convertStringToFloat(String value) {
+        return Float.parseFloat(value);
+    }
+
+    public static boolean isMaxNumber(int value, int max, String field) {
+        return value > max;
+    }
+
+    public static boolean isEmpty(String value, String field) {
+        return value == null || value.trim().isEmpty();
+    }
+
+    public static boolean isMaxLength(String value, int max, String field) {
+        return value.length() > max;
+    }
+
+    public static boolean isInvalidInt(String value) {
         if (value == null || value.trim().isEmpty()) {
-            throw new EmptyException(field);
+            return true;
+        }
+        try {
+            convertStringToInt(value);
+            return false;
+        } catch (NumberFormatException e) {
+            return true;
         }
     }
 
-    public static void isMaxLength(String value, int max, String field) {
-        if (value.length() > max) {
-            throw new MaxLengthException(field, max);
+    public static boolean isInValidFloat(String value) {
+        if (value == null || value.trim().isEmpty()) {
+            return true;
+        }
+        try {
+            convertStringToFloat(value);
+            return false;
+        } catch (NumberFormatException e) {
+            return true;
         }
     }
 

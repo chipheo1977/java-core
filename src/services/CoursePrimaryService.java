@@ -1,10 +1,13 @@
 package services;
 
-import constant.MaxLimit;
 import entity.CoursePrimary;
+import exception.AppException;
+import exception.NotFoundException;
+import utils.CourseHelper;
 import utils.Helper;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class CoursePrimaryService {
     private final ArrayList<CoursePrimary> courses;
@@ -19,58 +22,83 @@ public class CoursePrimaryService {
     }
 
     public CoursePrimary getById(int id) {
-        for (CoursePrimary c : this.courses) {
-            if (c.getId() == id) {
-                return c;
+        for (CoursePrimary course : this.courses) {
+            if (course.getId() == id) {
+                return course;
+            }
+        }
+        return null;
+    }
+
+    public CoursePrimary getByName(String name) {
+        for (CoursePrimary course : this.courses) {
+            if (Objects.equals(course.getName(), name)) {
+                return course;
             }
         }
         return null;
     }
 
     public void add() {
-        String name = Helper.inputValidName("name", MaxLimit.Length.getValue());
-        int lesson = Helper.inputValidInt("lesson", MaxLimit.ID.getValue());
-        float retail = Helper.inputValidFloat("retail", MaxLimit.PRICE.getValue());
-        int id = Helper.randomNumber();
+        try {
+            int id = Helper.randomNumber();
+            String name = CourseHelper.enterName();
+            int lesson = CourseHelper.enterLesson();
+            float retail = CourseHelper.enterPrice();
 
-        CoursePrimary newCourse = new CoursePrimary(
-                id,
-                name,
-                lesson,
-                retail
-        );
-        this.courses.add(newCourse);
+            CoursePrimary newCourse = new CoursePrimary(
+                    id,
+                    name,
+                    lesson,
+                    retail
+            );
+            this.courses.add(newCourse);
 
-        System.out.println("Add course primary: " + name + " success!");
+            System.out.println("Add course primary: " + name + " success!");
+        } catch (Exception e) {
+            System.out.println("Error system");
+        }
     }
 
     public void update() {
-        int id = Helper.inputValidInt("student id", MaxLimit.ID.getValue());
-        String name = Helper.inputValidName("name", MaxLimit.Length.getValue());
-        int lesson = Helper.inputValidInt("lesson", MaxLimit.LESSON.getValue());
-        float retail = Helper.inputValidFloat("retail", MaxLimit.PRICE.getValue());
+        try {
+            int id = CourseHelper.enterId();
+            String name = CourseHelper.enterName();
+            int lesson = CourseHelper.enterLesson();
+            float retail = CourseHelper.enterPrice();
 
-        CoursePrimary c = getById(id);
-        c.setName(name);
-        c.setLesson(lesson);
-        c.setRetail(retail);
+            CoursePrimary course = getById(id);
+            if (course == null) {
+                throw new NotFoundException();
+            }
 
-        System.out.println("Updated course primary: " + name + " success!");
+            course.setName(name);
+            course.setLesson(lesson);
+            course.setRetail(retail);
+
+            System.out.println("Updated course primary: " + name + " success!");
+        } catch (AppException e) {
+            System.out.println(e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Error system");
+        }
+
     }
 
     public void delete() {
-        int id = Helper.inputValidInt("course id", MaxLimit.ID.getValue());
-        CoursePrimary course = getById(id);
-        if (course == null) {
-            System.out.println("Course not found!");
-        } else {
-            for (CoursePrimary c : courses) {
-                if (c.getId() == id) {
-                    courses.remove(c);
-                }
+        try {
+            int id = CourseHelper.enterId();
+            CoursePrimary course = getById(id);
+            if (course == null) {
+                throw new NotFoundException();
             }
 
+            courses.removeIf(c -> c.getId() == id);
             System.out.println("Deleted course primary id: " + id + " success!");
+        } catch (AppException e) {
+            System.out.println(e.getMessage());
+        } catch (Exception e) {
+            System.out.println("System error");
         }
     }
 }

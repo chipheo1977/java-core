@@ -1,10 +1,7 @@
-package Controller;
+package controller;
 
-import entity.CoursePrimary;
 import services.CoursePrimaryService;
 import utils.Helper;
-
-import java.util.Scanner;
 
 public class CoursePrimaryController {
 

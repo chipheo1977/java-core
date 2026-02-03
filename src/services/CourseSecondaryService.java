@@ -1,7 +1,9 @@
 package services;
 
-import constant.MaxLimit;
 import entity.CourseSecondary;
+import exception.AppException;
+import exception.NotFoundException;
+import utils.CourseHelper;
 import utils.Helper;
 
 import java.util.ArrayList;
@@ -29,51 +31,67 @@ public class CourseSecondaryService {
     }
 
     public void add() {
-        String name = Helper.inputValidName("name", MaxLimit.Length.getValue());
-        int lesson = Helper.inputValidInt("lesson", MaxLimit.LESSON.getValue());
-        float retail = Helper.inputValidFloat("retail", MaxLimit.PRICE.getValue());
-        int id = Helper.randomNumber();
+        try {
+            int id = Helper.randomNumber();
+            String name = CourseHelper.enterName();
+            int lesson = CourseHelper.enterLesson();
+            float retail = CourseHelper.enterPrice();
 
-        CourseSecondary newC = new CourseSecondary(
-                id,
-                name,
-                lesson,
-                retail
-        );
-        this.courses.add(newC);
+            CourseSecondary newCourse = new CourseSecondary(
+                    id,
+                    name,
+                    lesson,
+                    retail
+            );
+            this.courses.add(newCourse);
 
-        System.out.println("Add secondary course: " + name + " success!");
+            System.out.println("Add secondary course: " + name + " success!");
+        } catch (Exception e) {
+            System.out.println("System error");
+        }
+
     }
 
     public void update() {
-        int value = MaxLimit.ID.getValue();
-        int id = Helper.inputValidInt("Student id", value);
-        String name = Helper.inputValidName("name", MaxLimit.Length.getValue());
-        int lesson = Helper.inputValidInt("lesson", MaxLimit.LESSON.getValue());
-        float retail = Helper.inputValidFloat("retail", MaxLimit.PRICE.getValue());
+        try {
+            int id = CourseHelper.enterId();
+            String name = CourseHelper.enterName();
+            int lesson = CourseHelper.enterLesson();
+            float retail = CourseHelper.enterPrice();
 
-        CourseSecondary course = getById(id);
-        course.setName(name);
-        course.setLesson(lesson);
-        course.setRetail(retail);
+            CourseSecondary course = getById(id);
+            if (course == null) {
+                throw new NotFoundException();
+            }
 
-        System.out.println("Updated secondary course: " + name + " success!");
+            course.setName(name);
+            course.setLesson(lesson);
+            course.setRetail(retail);
+
+            System.out.println("Updated secondary course: " + name + " success!");
+        } catch (AppException e) {
+            System.out.println(e.getMessage());
+        } catch (Exception e) {
+            System.out.println("System error");
+        }
     }
 
     public void delete() {
-        int id = Helper.inputValidInt("course id", MaxLimit.ID.getValue());
+        try {
+            int id = CourseHelper.enterId();
 
-        CourseSecondary course = getById(id);
-        if (course == null) {
-            System.out.println("Course not found!");
-        } else {
-            for (CourseSecondary c : courses) {
-                if (c.getId() == id) {
-                    courses.remove(c);
-                }
+            CourseSecondary course = getById(id);
+            if (course == null) {
+                throw new NotFoundException();
             }
 
+            courses.removeIf(c -> c.getId() == id);
             System.out.println("deleted secondary course id: " + id + " success!");
+        } catch (AppException e) {
+            System.out.println(e.getMessage());
+        } catch (Exception e) {
+            System.out.println("System error");
         }
+
     }
 }

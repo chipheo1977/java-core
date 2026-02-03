@@ -1,4 +1,4 @@
-package entity.exeption;
+package exception;
 import constant.ErrorCode;
 
 public class MaxLengthException extends AppException {

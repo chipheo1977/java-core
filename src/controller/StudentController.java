@@ -1,4 +1,4 @@
-package Controller;
+package controller;
 
 import services.StudentService;
 import utils.Helper;
@@ -18,8 +18,13 @@ public class StudentController {
             System.out.println("2. add");
             System.out.println("3. edit");
             System.out.println("4. delete");
-            System.out.println("5. exit!");
-            System.out.print("select option (1-5): ");
+            System.out.println("5. list student by course");
+            System.out.println("6. find students highest score by course");
+            System.out.println("7. order student by increase");
+            System.out.println("8. order student by decrease");
+            System.out.println("9. find lowest score student");
+            System.out.println("10. exit!");
+            System.out.print("select option (1-10): ");
 
             choice = Helper.scanner.nextInt();
             Helper.scanner.nextLine();
@@ -42,10 +47,30 @@ public class StudentController {
                     this.service.delete();
                     break;
                 case 5:
+                    System.out.println("Options 5: list student by course");
+                    service.listStudentByCourse();
+                    break;
+                case 6:
+                    System.out.println("Options 6: list student highest score by course");
+                    service.findStudentHighestScoreByCourse();
+                    break;
+                case 7:
+                    System.out.println("Options 7: order student by increase");
+                    service.sortIncrease();
+                    break;
+                case 8:
+                    System.out.println("Options 8: order student by decrease");
+                    service.sortDecrease();
+                    break;
+                case 9:
+                    System.out.println("Options 9: find lowest score student");
+                    service.findLowestScore();
+                    break;
+                case 10:
                     Helper.scanner.close();
                     break;
                 default:
-                    System.out.println("Wrong options, please select 1–5.");
+                    System.out.println("Wrong options, please select 1–10.");
             }
         } while (choice != 5);
     }

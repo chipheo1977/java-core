@@ -1,8 +1,6 @@
-package Controller;
+package controller;
 
-import entity.CourseSecondary;
 import services.CourseSecondaryService;
-import utils.Helper;
 
 import java.util.Scanner;
 
