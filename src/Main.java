@@ -33,12 +33,12 @@ public class Main {
         defaultStudents.add(new Student("Loi Nguyen Huu", 25, false, 1.5F, 1, Role.NORMAL, groupCourse1));
         defaultStudents.add(new Student("Loi Nguyen Viet", 26, false, 2.5F, 2, Role.LEADER, groupCourse2));
         defaultStudents.add(new Student("Loi Tien Nam", 20, false, 5.5F, 3, Role.SEMI_LEADER, groupCourse1));
-        defaultStudents.add(new Student("Trung Huu Hai", 30, false, 9.5F, 4, Role.NORMAL, groupCourse2));
-        defaultStudents.add(new Student("Trung Huu Hai 1", 30, false, 9.5F, 4, Role.NORMAL, groupCourse2));
-        defaultStudents.add(new Student("Trung Huu Hai 2", 30, false, 9.5F, 4, Role.NORMAL, groupCourse2));
-        defaultStudents.add(new Student("Trung Huu Hai 3", 30, false, 9.5F, 4, Role.NORMAL, groupCourse2));
-        defaultStudents.add(new Student("Trung Huu Hai 4", 30, false, 9.5F, 4, Role.NORMAL, groupCourse2));
-        defaultStudents.add(new Student("Trung Huu Hai 5", 30, false, 9.5F, 4, Role.NORMAL, groupCourse2));
+//        defaultStudents.add(new Student("Trung Huu Hai", 30, false, 9.5F, 4, Role.NORMAL, groupCourse2));
+//        defaultStudents.add(new Student("Trung Huu Hai 1", 30, false, 9.5F, 4, Role.NORMAL, groupCourse2));
+//        defaultStudents.add(new Student("Trung Huu Hai 2", 30, false, 9.5F, 4, Role.NORMAL, groupCourse2));
+//        defaultStudents.add(new Student("Trung Huu Hai 3", 30, false, 9.5F, 4, Role.NORMAL, groupCourse2));
+//        defaultStudents.add(new Student("Trung Huu Hai 4", 30, false, 9.5F, 4, Role.NORMAL, groupCourse2));
+//        defaultStudents.add(new Student("Trung Huu Hai 5", 30, false, 9.5F, 4, Role.NORMAL, groupCourse2));
 
     }
 

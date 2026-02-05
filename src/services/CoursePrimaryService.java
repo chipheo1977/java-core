@@ -1,5 +1,6 @@
 package services;
 
+import entity.Course;
 import entity.CoursePrimary;
 import exception.AppException;
 import exception.NotFoundException;
@@ -7,7 +8,11 @@ import utils.CourseHelper;
 import utils.Helper;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class CoursePrimaryService {
     private final ArrayList<CoursePrimary> courses;
@@ -100,5 +105,21 @@ public class CoursePrimaryService {
         } catch (Exception e) {
             System.out.println("System error");
         }
+    }
+
+    private List<CoursePrimary> getCoursesByIds(Set<Integer> ids) {
+        return courses.stream()
+                .filter(course -> ids.contains(course.getId()))
+                .collect(Collectors.toList());
+    }
+
+    public Map<Integer, String> getMapCourseNameByIds(Set<Integer> courseIds) {
+
+        // 1. list caurse by ids
+        List<CoursePrimary> coursePrimaries = getCoursesByIds(courseIds);
+
+        //2. map course name by id
+        return coursePrimaries.stream()
+                .collect(Collectors.toMap(Course::getId, CoursePrimary::getName));
     }
 }

@@ -1,6 +1,6 @@
 package entity;
 
-public class CoursePrimary extends Course{
+public class CoursePrimary extends Course {
 
     public CoursePrimary(int id, String name, int lesson, double retail) {
         super(id, name, lesson, retail);

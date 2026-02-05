@@ -41,7 +41,7 @@ public class StudentHelper {
 
                 boolean isInValid = Helper.isInvalidInt(age);
                 if (isInValid) {
-                    throw new InvalidException();
+                    throw new InvalidException(); // TODO: Exception k ro rang
                 }
                 int ageFormatted = Helper.convertStringToInt(age);
                 boolean isMax = Helper.isMaxNumber(ageFormatted, MaxLimit.AGE, "age");

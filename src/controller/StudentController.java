@@ -56,11 +56,11 @@ public class StudentController {
                     break;
                 case 7:
                     System.out.println("Options 7: order student by increase");
-                    service.sortIncrease();
+                    service.sortIncrease();//TODO chu y ten ham
                     break;
                 case 8:
                     System.out.println("Options 8: order student by decrease");
-                    service.sortDecrease();
+                    service.sortDecrease();//TODO chu y ten ham
                     break;
                 case 9:
                     System.out.println("Options 9: find lowest score student");

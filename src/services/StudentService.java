@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class StudentService {
@@ -45,7 +46,7 @@ public class StudentService {
                     .min(Comparator.comparing(Student::getScore)).orElse(null);
 
             if (lowestStudent == null) {
-                throw new NotFoundException();
+                throw new NotFoundException(); // TODO: ro rang hon
             }
 
             System.out.println(lowestStudent);
@@ -56,36 +57,44 @@ public class StudentService {
 
     public void listStudentByCourse() {
         try {
+
+            // 1. Can course name -> service khac
+            // Giam so luong data can lay
+            Set<Integer> courseIds = students.stream().flatMap(it -> it.getCourseIds().stream()).collect(Collectors.toSet());
+            Map<Integer, String> mapCourseByNames = courseService.getMapCourseNameByIds(courseIds);
+
+            // 2. group
             Map<String, List<String>> mapStudents = students.stream()
-                    .flatMap(student -> student.getCourseIds().stream()
-                            .map(
-                                    courseId -> Map.entry(
-                                            courseService.getById(courseId).getName(),
-                                            student.getName()
-                                    )
-                            )
+                    .flatMap(student -> student.getCourseIds().stream().map(courseId -> buildMapStudentByCourse(courseId, student, mapCourseByNames))
                     ).collect(Collectors.groupingBy(
                             Map.Entry::getKey,
                             Collectors.mapping(Map.Entry::getValue, Collectors.toList())
                     ));
+
             System.out.println(mapStudents);
         } catch (AppException e) {
             System.out.println(e.getMessage());
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-
     }
+
+    private Map.Entry<String, String> buildMapStudentByCourse(Integer courseId, Student student, Map<Integer, String> mapCourseByNames) {
+        return Map.entry(mapCourseByNames.get(courseId), student.getName());
+    }
+
 
     public void findStudentHighestScoreByCourse() {
         try {
+            //TODO:  nen nhap id
             String courseName = CourseHelper.enterName();
             CoursePrimary found = courseService.getByName(courseName);
 
             if (found == null) {
-                throw new NotFoundException();
+                throw new NotFoundException(); // TODO: error can ro rang hon
             }
 
+            // TODO: Refactor
             Map<Integer, List<Student>> mapStudents = students.stream()
                     .flatMap(student -> student.getCourseIds().stream()
                             .map(
@@ -98,13 +107,18 @@ public class StudentService {
                             Map.Entry::getKey,
                             Collectors.mapping(Map.Entry::getValue, Collectors.toList())
                     ));
+
+            //
             List<Student> studentByCourse = mapStudents.get(found.getId());
+
             List<Student> studentsHighestScore = studentByCourse
                     .stream()
                     .sorted(Comparator.comparing(Student::getScore).reversed())
                     .limit(1)
                     .toList();
+
             studentsHighestScore.forEach(System.out::println);
+
         } catch (AppException e) {
             System.out.println(e.getMessage());
         } catch (Exception e) {
