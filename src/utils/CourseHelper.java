@@ -40,7 +40,7 @@ public class CourseHelper {
 
                 boolean isInValid = Helper.isInvalidInt(lesson);
                 if (isInValid) {
-                    throw new InvalidException();
+                    throw new InvalidException("lesson");
                 }
                 int lessonFormatted = Helper.convertStringToInt(lesson);
                 boolean isMax = Helper.isMaxNumber(lessonFormatted, MaxLimit.LESSON, "lesson");
@@ -69,7 +69,7 @@ public class CourseHelper {
 
                 boolean isInValid = Helper.isInvalidInt(price);
                 if (isInValid) {
-                    throw new InvalidException();
+                    throw new InvalidException("lesson");
                 }
                 int priceFormatted = Helper.convertStringToInt(price);
                 boolean isMax = Helper.isMaxNumber(priceFormatted, MaxLimit.PRICE, "price");
@@ -98,7 +98,7 @@ public class CourseHelper {
 
                 boolean isInValid = Helper.isInvalidInt(id);
                 if (isInValid) {
-                    throw new InvalidException();
+                    throw new InvalidException("id");
                 }
                 int idFormatted = Helper.convertStringToInt(id);
                 boolean isMax = Helper.isMaxNumber(idFormatted, MaxLimit.ID, "id");

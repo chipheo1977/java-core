@@ -61,7 +61,7 @@ public class CourseSecondaryService {
 
             CourseSecondary course = getById(id);
             if (course == null) {
-                throw new NotFoundException();
+                throw new NotFoundException("course");
             }
 
             course.setName(name);
@@ -82,7 +82,7 @@ public class CourseSecondaryService {
 
             CourseSecondary course = getById(id);
             if (course == null) {
-                throw new NotFoundException();
+                throw new NotFoundException("course");
             }
 
             courses.removeIf(c -> c.getId() == id);

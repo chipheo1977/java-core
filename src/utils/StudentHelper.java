@@ -41,7 +41,7 @@ public class StudentHelper {
 
                 boolean isInValid = Helper.isInvalidInt(age);
                 if (isInValid) {
-                    throw new InvalidException(); // TODO: Exception k ro rang
+                    throw new InvalidException("age");
                 }
                 int ageFormatted = Helper.convertStringToInt(age);
                 boolean isMax = Helper.isMaxNumber(ageFormatted, MaxLimit.AGE, "age");
@@ -70,7 +70,7 @@ public class StudentHelper {
 
                 boolean isInValid = Helper.isInValidFloat(score);
                 if (isInValid) {
-                    throw new InvalidException();
+                    throw new InvalidException("score");
                 }
                 float scoreFormatted = Helper.convertStringToFloat(score);
                 boolean isMax = Helper.isMaxNumber((int) scoreFormatted, MaxLimit.SCORE, "age");
@@ -100,7 +100,7 @@ public class StudentHelper {
 
                 boolean isInValid = Helper.isInvalidInt(role);
                 if (isInValid) {
-                    throw new InvalidException();
+                    throw new InvalidException("score");
                 }
                 int codeFormatted = Helper.convertStringToInt(role);
                 boolean isMax = Helper.isMaxNumber(codeFormatted, MaxLimit.ROLE, "role");
@@ -129,7 +129,7 @@ public class StudentHelper {
 
                 boolean isInValid = Helper.isInvalidInt(id);
                 if (isInValid) {
-                    throw new InvalidException();
+                    throw new InvalidException("score");
                 }
                 int idFormatted = Helper.convertStringToInt(id);
                 boolean isMax = Helper.isMaxNumber(idFormatted, MaxLimit.ID, "id");

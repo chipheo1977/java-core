@@ -1,19 +1,20 @@
 package services;
 
+import constant.FileConstant;
 import constant.Role;
 import entity.CoursePrimary;
 import entity.Student;
 import exception.AppException;
 import exception.NotFoundException;
 import utils.CourseHelper;
+import utils.FileHelper;
 import utils.Helper;
 import utils.StudentHelper;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class StudentService {
@@ -46,7 +47,7 @@ public class StudentService {
                     .min(Comparator.comparing(Student::getScore)).orElse(null);
 
             if (lowestStudent == null) {
-                throw new NotFoundException(); // TODO: ro rang hon
+                throw new NotFoundException("student");
             }
 
             System.out.println(lowestStudent);
@@ -55,66 +56,64 @@ public class StudentService {
         }
     }
 
-    public void listStudentByCourse() {
-        try {
-
-            // 1. Can course name -> service khac
-            // Giam so luong data can lay
-            Set<Integer> courseIds = students.stream().flatMap(it -> it.getCourseIds().stream()).collect(Collectors.toSet());
-            Map<Integer, String> mapCourseByNames = courseService.getMapCourseNameByIds(courseIds);
-
-            // 2. group
-            Map<String, List<String>> mapStudents = students.stream()
-                    .flatMap(student -> student.getCourseIds().stream().map(courseId -> buildMapStudentByCourse(courseId, student, mapCourseByNames))
-                    ).collect(Collectors.groupingBy(
-                            Map.Entry::getKey,
-                            Collectors.mapping(Map.Entry::getValue, Collectors.toList())
-                    ));
-
-            System.out.println(mapStudents);
-        } catch (AppException e) {
-            System.out.println(e.getMessage());
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
     private Map.Entry<String, String> buildMapStudentByCourse(Integer courseId, Student student, Map<Integer, String> mapCourseByNames) {
         return Map.entry(mapCourseByNames.get(courseId), student.getName());
     }
 
-
-    public void findStudentHighestScoreByCourse() {
+    public void listStudentByCourse() {
         try {
-            //TODO:  nen nhap id
-            String courseName = CourseHelper.enterName();
-            CoursePrimary found = courseService.getByName(courseName);
+            Set<Integer> courseIds = students
+                    .stream()
+                    .flatMap(it -> it.getCourseIds().stream()).collect(Collectors.toSet());
+            Map<Integer, String> mapCourseByNames = courseService.getMapCourseNameByIds(courseIds);
 
-            if (found == null) {
-                throw new NotFoundException(); // TODO: error can ro rang hon
-            }
-
-            // TODO: Refactor
-            Map<Integer, List<Student>> mapStudents = students.stream()
-                    .flatMap(student -> student.getCourseIds().stream()
-                            .map(
-                                    courseId -> Map.entry(
-                                            courseId,
-                                            student
-                                    )
-                            )
-                    ).collect(Collectors.groupingBy(
+            Map<String, List<String>> mapStudents = students.stream()
+                    .flatMap(student -> student
+                            .getCourseIds()
+                            .stream()
+                            .map(courseId -> buildMapStudentByCourse(courseId, student, mapCourseByNames)))
+                    .collect(Collectors.groupingBy(
                             Map.Entry::getKey,
                             Collectors.mapping(Map.Entry::getValue, Collectors.toList())
                     ));
 
-            //
-            List<Student> studentByCourse = mapStudents.get(found.getId());
+            System.out.println("5:" + mapStudents);
+
+        } catch (AppException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void findStudentHighestScoreByCourse() {
+        try {
+            int id = CourseHelper.enterId();
+            CoursePrimary found = courseService.getById(id);
+
+            if (found == null) {
+                throw new NotFoundException("course");
+            }
+
+            Set<Integer> courseIds = students
+                    .stream()
+                    .flatMap(it -> it.getCourseIds().stream()).collect(Collectors.toSet());
+            Map<Integer, String> mapCourseByNames = courseService.getMapCourseNameByIds(courseIds);
+
+            Map<Integer, List<Student>> mapStudentsByCourse = students.stream()
+                    .flatMap(student -> student
+                            .getCourseIds()
+                            .stream()
+                            .map(courseId -> Map.entry(courseId, student)))
+                    .collect(Collectors.groupingBy(
+                            Map.Entry::getKey,
+                            Collectors.mapping(Map.Entry::getValue, Collectors.toList())
+                    ));
+
+            List<Student> studentByCourse = mapStudentsByCourse.get(found.getId());
 
             List<Student> studentsHighestScore = studentByCourse
                     .stream()
                     .sorted(Comparator.comparing(Student::getScore).reversed())
-                    .limit(1)
+                    .limit(2)
                     .toList();
 
             studentsHighestScore.forEach(System.out::println);
@@ -126,7 +125,7 @@ public class StudentService {
         }
     }
 
-    public void sortIncrease() {
+    public void sortByAsc() {
         try {
             List<Student> sortStudents = students
                     .stream()
@@ -138,7 +137,7 @@ public class StudentService {
         }
     }
 
-    public void sortDecrease() {
+    public void sortByDesc() {
         try {
             List<Student> sortStudents = students
                     .stream()
@@ -195,7 +194,7 @@ public class StudentService {
             Student student = getById(id);
 
             if (student == null) {
-                throw new NotFoundException();
+                throw new NotFoundException("student");
             }
 
             students.removeIf(s -> s.getId() == id);
@@ -206,5 +205,30 @@ public class StudentService {
             System.out.println("Error system");
         }
 
+    }
+
+    public void exportToFile() {
+        try {
+            Path path = FileHelper.getPath(FileConstant.STUDENTS_PATH);
+            if (!Files.exists(path)) {
+                throw new NotFoundException("File");
+            }
+
+            List<Student> studentsExport = students
+                    .stream()
+                    .sorted(Comparator.comparing(Student::getScore))
+                    .limit(3)
+                    .toList();
+            List<String> lines = studentsExport.stream()
+                    .map(item -> item.getId() + " " + item.getName())
+                            .toList();
+
+            FileHelper.writeFile(path, lines);
+            System.out.println("Export success");
+        } catch (AppException e) {
+            System.out.println(e.getMessage());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

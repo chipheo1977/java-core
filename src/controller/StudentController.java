@@ -23,8 +23,9 @@ public class StudentController {
             System.out.println("7. order student by increase");
             System.out.println("8. order student by decrease");
             System.out.println("9. find lowest score student");
-            System.out.println("10. exit!");
-            System.out.print("select option (1-10): ");
+            System.out.println("10. export lowest score student");
+            System.out.println("11. exit!");
+            System.out.print("select option (1-11): ");
 
             choice = Helper.scanner.nextInt();
             Helper.scanner.nextLine();
@@ -56,17 +57,21 @@ public class StudentController {
                     break;
                 case 7:
                     System.out.println("Options 7: order student by increase");
-                    service.sortIncrease();//TODO chu y ten ham
+                    service.sortByAsc();
                     break;
                 case 8:
                     System.out.println("Options 8: order student by decrease");
-                    service.sortDecrease();//TODO chu y ten ham
+                    service.sortByDesc();
                     break;
                 case 9:
                     System.out.println("Options 9: find lowest score student");
                     service.findLowestScore();
                     break;
                 case 10:
+                    System.out.println("Options 10: export 3 student lowest point");
+                    service.exportToFile();
+                    break;
+                case 11:
                     Helper.scanner.close();
                     break;
                 default:

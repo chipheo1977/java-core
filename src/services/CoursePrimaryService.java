@@ -74,7 +74,7 @@ public class CoursePrimaryService {
 
             CoursePrimary course = getById(id);
             if (course == null) {
-                throw new NotFoundException();
+                throw new NotFoundException("course");
             }
 
             course.setName(name);
@@ -95,7 +95,7 @@ public class CoursePrimaryService {
             int id = CourseHelper.enterId();
             CoursePrimary course = getById(id);
             if (course == null) {
-                throw new NotFoundException();
+                throw new NotFoundException("course");
             }
 
             courses.removeIf(c -> c.getId() == id);
@@ -115,7 +115,7 @@ public class CoursePrimaryService {
 
     public Map<Integer, String> getMapCourseNameByIds(Set<Integer> courseIds) {
 
-        // 1. list caurse by ids
+        // 1. list course by ids
         List<CoursePrimary> coursePrimaries = getCoursesByIds(courseIds);
 
         //2. map course name by id
