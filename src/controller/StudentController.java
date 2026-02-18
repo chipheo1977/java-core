@@ -2,6 +2,7 @@ package controller;
 
 import services.StudentService;
 import utils.Helper;
+import utils.StudentHelper;
 
 public class StudentController {
     private final StudentService service;
@@ -10,7 +11,38 @@ public class StudentController {
         this.service = service;
     }
 
-    public void managementStudent() {
+    private void hackScore() throws Exception {
+        int id = StudentHelper.enterId();
+
+        Thread t1 = new Thread(() -> service.autoUpdateScore(id));
+        Thread t2 = new Thread(() -> service.autoUpdateScore(id));
+        t1.start();
+        t2.start();
+
+        t1.join();
+        t2.join();
+
+        System.out.println("Hack success");
+    }
+
+    private void testDeadlock() throws Exception {
+        int st1Id = StudentHelper.enterId();
+        int st2Id = StudentHelper.enterId();
+
+        Thread t1 = new Thread(() ->
+                service.transferScore(st1Id, st2Id));
+
+        Thread t2 = new Thread(() ->
+                service.transferScore(st1Id, st2Id));
+
+        t1.start();
+        t2.start();
+
+        t1.join();
+        t2.join();
+    }
+
+    public void managementStudent() throws Exception {
         int choice;
         do {
             System.out.println("===== MENU student =====");
@@ -24,8 +56,10 @@ public class StudentController {
             System.out.println("8. order student by decrease");
             System.out.println("9. find lowest score student");
             System.out.println("10. export lowest score student");
-            System.out.println("11. exit!");
-            System.out.print("select option (1-11): ");
+            System.out.println("11. race condition");
+            System.out.println("12. deadlock");
+            System.out.println("13. exit!");
+            System.out.print("select option (1-13): ");
 
             choice = Helper.scanner.nextInt();
             Helper.scanner.nextLine();
@@ -72,11 +106,19 @@ public class StudentController {
                     service.exportToFile();
                     break;
                 case 11:
+                    System.out.println("Options 11: race condition");
+                    this.hackScore();
+                    break;
+                case 12:
+                    System.out.println("Options 12: deadlock");
+                    this.testDeadlock();
+                    break;
+                case 13:
                     Helper.scanner.close();
                     break;
                 default:
-                    System.out.println("Wrong options, please select 1–10.");
+                    System.out.println("Wrong options, please select 1–13.");
             }
-        } while (choice != 5);
+        } while (choice != 12);
     }
 }

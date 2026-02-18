@@ -45,7 +45,7 @@ public class Main {
         FileHelper.createFile();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         CoursePrimaryService coursePrimaryService = new CoursePrimaryService(defaultCoursesPrimary);
         CoursePrimaryController coursePrimaryController = new CoursePrimaryController(coursePrimaryService);
 
@@ -85,7 +85,7 @@ public class Main {
                     Helper.scanner.close();
                     break;
                 default:
-                    System.out.println("Wrong options, please select 1–3.");
+                    System.out.println("Wrong options, please select 1–4.");
             }
 
         } while (choice != 5);

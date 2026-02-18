@@ -185,7 +185,42 @@ public class StudentService {
         } catch (Exception e) {
             System.out.println("Error system");
         }
+    }
 
+    public synchronized void autoUpdateScore(int id) {
+        try {
+            Student student = getById(id);
+
+            float currentScore = student.getScore();
+            currentScore = currentScore + 1;
+
+            student.setScore(currentScore);
+        } catch (AppException e) {
+            System.out.println(e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Error system");
+        }
+    }
+
+    public void transferScore(int fromId, int toId) {
+        try {
+            Student from = getById(fromId);
+            Student to = getById(toId);
+
+            synchronized (from) {
+
+                try { Thread.sleep(100); } catch (Exception e) {}
+
+                synchronized (to) {
+                    from.setScore(from.getScore() - 1);
+                    to.setScore(to.getScore() + 1);
+                }
+            }
+        } catch (AppException e) {
+            System.out.println(e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Error system");
+        }
     }
 
     public void delete() {
@@ -221,7 +256,7 @@ public class StudentService {
                     .toList();
             List<String> lines = studentsExport.stream()
                     .map(item -> item.getId() + " " + item.getName())
-                            .toList();
+                    .toList();
 
             FileHelper.writeFile(path, lines);
             System.out.println("Export success");
